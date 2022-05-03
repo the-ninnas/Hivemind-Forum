@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+
+     <!-- css -->
+     <link rel="stylesheet" href="../css/forum.css">
+
+
+</head>
+
+<body>
+
+    <!-- This page will display all the posts in choosed category, so if user presses on a category link on a posts, it will come to this page. -->
+
+    <div class="banner">
+
+      {{if .Username}}
+     <div class="status">
+      <span class="online"></span>
+      <p>{{.Username}} is online</p>  
+      <form style="display: inline-block" action="/logout" method="POST"><button class="log-btn">Log Out</button></form>
+     </div>
+     {{else}}
+     <div class="status">
+      <p> Log in or <a href="/register">Register</a></p>
+     </div>
+     
+     {{end}}
+      
+    </div>
+
+
+      <!-- left side profile navbar-->
+
+      <div class="leftwrapper">
+
+        <div class="leftsidebar">
+
+          <div class="centered">
+
+            <a href="/"><img class="centered" src="../css/bee.png"></a>
+
+            <h3>HIVEMIND</h3>
+
+          </div>
+          <div class="sign-box">
+            {{if .Username }}
+
+            <a href="/post"><button class="blue-btn">Create Post</button></a>
+            <a href="/"><button class="logged-in">My Topics*</button></a>
+            <button class="logged-in">Messages*</button>
+            <button class="logged-in">Settings*</button> {{else}}
+
+            <form action="/login" method="POST">
+                <input class="logged-out" type="text" name="username" placeholder="Username" required />
+                <input class="logged-out" type="password" name="password" placeholder="Password" required />
+                <input type="checkbox" checked="checked" name="remember" /> Remember me
+                <input class="logged-in" type="submit" value="LOG IN" />
+            </form> 
+
+            <a href="https://github.com/login/oauth/authorize?client_id={{.Github}}&scope=user">
+                <button class="log-ext git">
+                    <table>
+                        <th>
+                            <img src="../css/octopuss">
+                        </th>
+                        <th>
+                            <p>Log in with Github</p>
+                        </th>
+                    </table>
+                </button>
+            </a>  
+
+            <a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&redirect_uri=http://localhost:8080/googlecallback&access_type=online&client_id={{.Google}}">
+                <button class="log-ext goo">
+                    <table>
+                        <th>
+                            <img src="../css/google">
+                        </th>
+                        <th>
+                            Log in with Google
+                        </th>
+                    </table>
+                </button>
+            </a>
+
+
+            {{end}}
+        </div>
+
+     <!-- Should/will display a message if user is not logged in, this could be substituted with an if logged in clause, so if user is not logged in it will not see the comment form -->      
+        
+        {{if .Message}}
+        <div class="msg-box">
+            <h3>Oops!</h3><span>{{ .Message}}</span>
+        </div>    
+        {{end}}
+
+          {{if .Username}}
+          <form action="/logout" method="POST"><button class="logged-in-bottom">Log Out</button></form>     
+          {{else}}
+          <a href="/register"><button class="blue-btn-bottom">Register</button></a>    
+          {{end}}
+        </div>    
+
+    </div>
+   
+   
+
+    <!--right side categories and/or post navbar -->
+
+    <div class="wrapper">
+
+        <div class="sidebar">     
+
+            <div class="category-list">
+                <h3>CATEGORIES<span><a href="/" style="font-size: 15px; float: right; padding-right: 6px;"><u>View All</u></a></span></h3>
+                <p>Jump to a category or <a href="/category"><button class="new-cat-btn">Create a Category</button></a></p>
+                
+                <div class="cat-scroll">
+                {{range .Categories}}
+                
+                <a href="/c/{{.TitleEncoded}}"><button class="cat-btn">{{.Title}}</button></a>
+               
+                {{end}}
+                </div>
+            
+            </div>
+
+
+            
+            <div>
+                 <!-- Tips -->
+
+            <div class="insta-post">
+
+                <h3>What is "buzz"?</h3>
+                <span>If you wish to vote for an idea or bring attention to it, you can <b>'Buzz!'</b> it. The more buzz ideas get, the likelier they will be considered as ifluential or contributing to the final result. <br><br>However, if you think some comments are lacking, click the <b>'No buzz'</b> button; the author will see these and might be prompter to develop their proposals better. Hooray for feedback!</span>
+            </div>
+            </div>
+        </div>   
+    </div>
+   
+    <!-- end of sidenav profile bar-->
+
+    <!-- MIDDLE FEED PART-->
+
+    <!-- post-->
+
+    <div class="above-feed">
+
+
+        <!-- Link back to the category we are in right now. example: we are in category: animals, post: dogs; it will go to the page with all the posts about animals -->
+        <a href="/c/{{.CategoryEncoded}}"><button class="back-btn">Back to {{.Post.Category}}</button></a>
+
+    </div>
+
+    <div class="feed">
+
+    <div class="post-box">
+
+        <h1>{{.Post.Title}}</h1>
+
+        <img src="../images/{{.Post.Picture}}" alt="">
+
+        <div class="content-box">
+
+            {{.Post.Content}}
+        
+        </div>
+        
+    </div>
+
+    <!-- end of post-->
+
+
+
+      <!-- This form is for creating comments for a post. -->
+
+      <div class="comment-box">
+
+    <h4>Contribute:</h4>
+
+      <form action="/comments/postid={{.Post.ID}}" method="POST">
+        <textarea type="text" name="comment" required rows="4" cols="50" placeholder="Join in on the brainstorm! Make sure you contribute a new idea or a variation of one, because you can show support of someone else's idea by buzzing! You can also pose more questions or offer critique to someone else's thoughts."></textarea>
+            <div class="comment-btn-area">
+                <input type="submit" class="comment-btn" value="Comment">
+            </div>
+        </form>
+
+      </div>
+        
+    <!-- Comments section-->
+
+    <h4>Comments:</h4>
+
+    {{range .Comments}}
+
+    <div class="comment-box">
+    <h5><a>{{.Username}}</a> {{.Time}} <span class="buzzes">Buzzing: {{ .Likes}}</span></h5> 
+
+    <p>{{.Content}}</p>
+
+
+    <!-- Voting system -->
+   
+    <form action="" method="POST">
+        <input type="hidden" name="commentlike" value="like">
+        <input type="hidden" name="commentid" value="{{.ID}}">
+        <button type="submit" class="buzz-btn">Buzz!</button>
+    </form>
+    <form action="" method="POST">
+        <input type="hidden" name="commentdislike" value="dislike">
+        <input type="hidden" name="commentid" value="{{.ID}}">
+        <button type="submit" class="work-btn">No buzz.</button>
+    </form>
+    
+    
+
+   
+
+</div>
+
+    {{end}}
+
+
+    <!-- link to main page -->
+    <a href="/c/{{.Post.Category}}"><button class="back-btn">Back to {{.Post.Category}}</button></a>
+    
+    
+    <!-- end of feed-->
+    </div>
+
+</body>
+</html>

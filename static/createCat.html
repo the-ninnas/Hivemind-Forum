@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+     <!-- css -->
+     <link rel="stylesheet" href="../css/forum.css">
+
+
+</head>
+
+<body>
+
+   
+
+    <!-- This page will display all the posts in choosed category, so if user presses on a category link on a posts, it will come to this page. -->
+
+    <div class="banner">
+
+      {{if .Username}}
+     <div class="status">
+      <span class="online"></span>
+      <p>{{.Username}} is online</p>  
+      <a href="/logout" class="log-btn">Log Out</a>
+     </div>
+     {{else}}
+     <div class="status">
+      <p> Log in or <a href="/register">Register</a></p>
+     </div>
+     
+     {{end}}
+      
+    </div>
+
+
+       <!-- left side profile navbar-->
+
+       <div class="leftwrapper">
+
+        <div class="leftsidebar">
+
+          <div class="centered">
+
+            <a href="/"><img class="centered" src="../css/bee.png"></a>
+
+            <h3>HIVEMIND</h3>
+
+          </div>
+          
+          <div class="sign-box">
+
+            {{if .Username }}
+
+            <a href="/post"><button class="blue-btn"> Create Post</button></a>
+            <a href="/"><button class="logged-in"> My Topics*</button></a>
+            <button class="logged-in"> Messages*</button>
+            <button class="logged-in"> Settings*</button>
+
+            {{else}}
+
+            <form action="/login" method="POST">
+              <input class="logged-out" type="text" name="username" placeholder="Username" required>
+              <input class="logged-out" type="password" name="password" placeholder="Password" required>
+              <input type="checkbox" checked="checked" name="remember"> Remember me
+              <input class="logged-in" type="submit" value="LOG IN">
+            </form>
+          
+          {{end}}
+
+          
+          </div>  
+
+              
+        {{if .Message}}
+        <div class="msg-box">
+            <h3>Oops!</h3><span>{{ .Message}}</span>
+        </div>    
+        {{end}}
+
+          {{if .Username}}
+          <form action="logout" method="POST"><button class="logged-in-bottom">Log Out</button></form>     
+          {{else}}
+          <a href="/register"><button class="blue-btn-bottom">Register</button></a>    
+          {{end}}
+        </div>    
+
+    </div>
+   
+
+    <!--right side categories and/or post navbar -->
+
+    <div class="wrapper">
+
+        <div class="sidebar">     
+            <div class="category-list" style="height:75%">
+                <h3>CATEGORIES<span><a href="/" style="font-size: 15px; float: right; padding-right: 6px;"><u>View All</u></a></span></h3>
+                
+                <div class="cat-scroll">
+                {{range .Categories}}
+                
+                <a href="/c/{{.Title}}"><button class="cat-btn">{{.Title}}</button></a>
+               
+                {{end}}
+                </div>
+            
+            </div>
+            
+            
+        </div>   
+    </div>
+   
+    <!-- end of sidenav profile bar-->
+
+    
+
+    
+
+    <div class="above-feed">
+        <h1>Create New Category</h1>
+        
+      </div>
+  
+   
+    <!-- middle posting window-->
+
+    <div class="above-feed">
+
+        <a href="/"><button class="back-btn">Back to Categories</button></a>
+        <div class="pinned-msg">
+            <span>Check the category list on the right before posting to make sure you don't post someting too similar. <b>Tip:</b>Categories are can be wide and specific, but usually should be able to pair with other categories in a way that could make sense, like "Pet Names" or "Science and Technology".</span>
+        </div>
+    </div>
+
+
+    <div class="feed">
+
+    <!-- Will call /post function, to post inserted data to the database -->
+
+    <div class="new-cat-box">
+
+        <!-- action /category will call category function which will create new category with the inserted values -->
+        <form action="/category" method="POST">
+        <input type="text" class="p-title" placeholder="Name Your Category" name="title" required>
+        <textarea name="description" id="description" maxlength="180" placeholder="Add a description (maximum 180 characters!)" autofocus></textarea>
+
+        <input type="submit" class="post-btn" style="float: right;" value="Create Category!">
+        </form>
+        
+        <a href="/"><button class="post-btn" style="background-color: lightgray;">Cancel</button></a>
+
+
+        </div>
+    </div>
+    <!-- end of middle-->
+
+</body>
+</html>

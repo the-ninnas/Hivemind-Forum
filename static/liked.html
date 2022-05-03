@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>This page shows posts liked by {{ .Username }}</h1>
+    <a href="/"><button>Back to main</button></a>
+    <button><a href="/posted/{{.Username}}">Created posts</a></button>
+
+    {{range .Posts}}
+    <h2><a href="/comments/postid={{ .ID}}">{{ .Title}}</a></h2>
+    <h4>Sisu: {{ .Content}}</h4>
+    <h4>In: <a href="/c/{{ .Category}}">c/{{ .Category}}</a></h4>
+    <h5>Postitaja: {{.Username}}</h5>
+    <h5>Postitatud: {{.Time}}</h5>
+    <h5>Vote count: {{.Likes}}</h5>
+
+    <!-- Voting -->
+    <form action="" method="POST">
+        <input type="hidden" name="postlike" value="like">
+        <input type="hidden" name="postid" value="{{.ID}}">
+        <button type="submit">Like</button>
+    </form>
+    <form action="" method="POST">
+        <input type="hidden" name="postdislike" value="dislike">
+        <input type="hidden" name="postid" value="{{.ID}}">
+        <button type="submit">dislike</button>
+    </form>
+    {{end}}
+
+    
+</body>
+</html>

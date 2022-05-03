@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register to Hivemind</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../css/forum.css" />
+</head>
+
+<body class="registerPage">
+    <div class="middle-window">
+        <h2>The buzzing forums of crowdsourced ideas.</h2>
+
+        <p style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif">
+            Log in or register to start brainstorming!
+        </p>
+
+        <div class="reg-box">
+            <div style="height: fit-content">
+                <!-- action /register will call register function from the go code -->
+                <form action="/register" method="POST">
+                    <input type="text" class="logged-out" placeholder="Choose a Username" name="username" />
+                    <input type="text" class="logged-out" placeholder="Your Email Address" name="email" />
+                    <input type="password" class="logged-out" placeholder="Choose a Password" name="password" />
+                    <input type="password" class="logged-out" placeholder="Confirm Password" name="confirmPassword" />
+                    <input type="submit" class="blue-btn" value="Register" />
+                </form>
+            </div>
+
+            <p>
+                Already a member? <a href="/"><u>Log in</u></a> instead.
+            </p>
+            <!-- links to / which is our main page. DUPLICTAED -->
+            <!-- <a href="/"><button>Go to login</button></a> -->
+
+            <!-- If there is error, like username already in use etc, it will display this message -->
+            <h3>{{ .Message }}</h3>
+        </div>
+    </div>
+
+    <div class="bee bee-1">
+        <img src="../css/bee.png" alt="" />
+    </div>
+    <div class="bee bee-2">
+        <img src="../css/bee.png" alt="" />
+    </div>
+    <div class="bee bee-3">
+        <img src="../css/bee.png" alt="" />
+    </div>
+    <div class="bee bee-4">
+        <img src="../css/bee.png" alt="" />
+    </div>
+
+
+</body>
+
+</html>

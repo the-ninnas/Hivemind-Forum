@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/forum.css">
+
+
+</head>
+
+<body>
+
+    <!-- This page will display all the posts in choosed category, so if user presses on a category link on a posts, it will come to this page. -->
+
+    <div class="banner">
+
+        {{if .Username}}
+        <div class="status">
+            <span class="online"></span>
+            <p>{{.Username}} is online</p>
+            <form style="display: inline-block" action="/logout" method="POST"><button class="log-btn">Log Out</button></form>
+        </div>
+        {{else}}
+        <div class="status">
+            <p> Log in or <a href="/register">Register</a></p>
+        </div>
+
+        {{end}}
+
+    </div>
+
+
+    <!-- left side profile navbar-->
+
+    <div class="leftwrapper">
+
+        <div class="leftsidebar">
+
+            <div class="centered">
+
+                <a href="/"><img class="centered" src="../css/bee.png"></a>
+
+                <h3>HIVEMIND</h3>
+
+            </div>
+            <div class="sign-box">
+                {{if .Username }}
+
+                <a href="/post"><button class="blue-btn">Create Post</button></a>
+                <a href="/"><button class="logged-in">My Topics*</button></a>
+                <button class="logged-in">Messages*</button>
+                <button class="logged-in">Settings*</button> {{else}}
+
+                <form action="/login" method="POST">
+                    <input class="logged-out" type="text" name="username" placeholder="Username" required />
+                    <input class="logged-out" type="password" name="password" placeholder="Password" required />
+                    <input type="checkbox" checked="checked" name="remember" /> Remember me
+                    <input class="logged-in" type="submit" value="LOG IN" />
+                </form> 
+
+                <a href="https://github.com/login/oauth/authorize?client_id={{.Github}}&scope=user">
+                    <button class="log-ext git">
+                        <table>
+                            <th>
+                                <img src="../css/octopuss">
+                            </th>
+                            <th>
+                                <p>Log in with Github</p>
+                            </th>
+                        </table>
+                    </button>
+                </a>  
+
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&redirect_uri=http://localhost:8080/googlecallback&access_type=online&client_id={{.Google}}">
+                    <button class="log-ext goo">
+                        <table>
+                            <th>
+                                <img src="../css/google">
+                            </th>
+                            <th>
+                                Log in with Google
+                            </th>
+                        </table>
+                    </button>
+                </a>
+
+
+                {{end}}
+            </div>
+
+
+
+            {{if .Message}}
+            <div class="msg-box">
+                <h3>Oops!</h3><span>{{ .Message}}</span>
+            </div>
+            {{end}} {{if .Username}}
+            <form action="/logout" method="POST"><button class="logged-in-bottom">Log Out</button></form>
+            {{else}}
+            <a href="/register"><button class="blue-btn-bottom">Register</button></a> 
+            {{end}}
+        </div>
+
+    </div>
+
+
+
+    <!--right side categories and/or post navbar -->
+
+    <div class="wrapper">
+
+        <div class="sidebar">
+
+            <div class="category-list">
+                <h3>CATEGORIES<span><a href="/" style="font-size: 15px; float: right; padding-right: 6px;"><u>View All</u></a></span></h3>
+                <p>Jump to a category or <a href="/category"><button class="new-cat-btn">Create a Category</button></a></p>
+
+                <div class="cat-scroll">
+                    {{range .Categories}}
+
+                    <a href="/c/{{.TitleEncoded}}"><button class="cat-btn">{{.Title}}</button></a> {{end}}
+                </div>
+
+            </div>
+
+            <div>
+                <!-- To add a post in the current category -->
+
+                <div class="insta-post">
+
+                    <p>Does this look like the right category? Post your topic directly to <b>{{.Category}}</b> right here: </p>
+
+
+                    <form action="/c/{{.CategoryEncoded}}" method="POST">
+                        <input class="insta-title" type="text" name="title" placeholder="Title">
+                        <textarea class="insta-textarea" name="content" placeholder="Text" rows="10" cols="44"></textarea>
+
+                        <button class="logged-in" type="submit" name="submit" value="submit-post">Post in {{.Category}}</button>
+                    </form>
+
+
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- end of sidenav profile bar-->
+
+
+
+    <div class="above-feed">
+
+        <a href="/"><button class="back-btn">Back to Categories</button></a>
+        <h2>{{.Category}}</h2>
+
+
+        <!-- THIS IS START FILTER -->
+
+        {{if .Username}}
+        <form action="" method="GET" style="display:inline-block">
+            <input type="hidden" name="posted" value="true">
+            <button type="submit" class="new-cat-btn">Posted by me</button>
+        </form>
+
+        <form action="" method="GET" style="display:inline-block">
+            <input type="hidden" name="liked" value="true">
+            <button type="submit" class="new-cat-btn">Liked by me</button>
+        </form>
+
+        <a href="/c/{{.Category}}"><button  class="new-cat-btn" style="display:inline-block">Show all posts</button></a> {{end}}
+        <!-- THIS IS END OF FILTER -->
+
+    </div>
+
+    <!-- middle posts feed-->
+
+
+    <div class="feed-banner">
+        <div class="forum-header rounded top">
+            <div class="row topic column pad">
+                Post
+            </div>
+            <div class="row user column lpad">
+                Author
+            </div>
+            <div class="row replies column lpad">
+                Buzz
+            </div>
+            <div class="row time column lpad">
+                Date of post
+            </div>
+        </div>
+    </div>
+    <div class="feed">
+
+        <!-- start of a single post thread-->
+
+        <div class="pinned-msg">
+            <span>
+              Welcome <b>{{.Username}}</b>! Here's two things to know: before you post, try commenting on one of your fellow-minders' posts to get some buzz. And, before creating a new category, check existing one's first.
+          </span>
+        </div>
+
+        {{range .Posts}}
+
+        <div class="forum-topic">
+
+            <div class="row title column lpad overflow-control">
+
+
+
+                <span>
+                    <a href="/comments/postid={{ .ID}}">{{ .Title}}</a>
+                </span>
+
+
+
+            </div>
+
+            <div class="row user column lpad overflow-control">
+              <span>
+                <!-- <a href="/posted/{{.Username}}">{{.Username}}</a> -->
+                {{.Username}}
+              </span>
+
+            </div>
+
+            <div class="row replies column lpad overflow-control">
+                <span>{{.Likes}}</span>
+
+            </div>
+
+            <div class="row time column lpad overflow-control">
+                <span>{{.Time}}</span>
+            </div>
+
+            <form action="" method="POST" style="display:inline-block;">
+                <input type="hidden" name="postdislike" value="dislike">
+                <input type="hidden" name="postid" value="{{.ID}}">
+                <button type="submit" class="forum-report">Dislike</button>
+            </form>
+
+            <form action="" method="POST" style="display:inline-block;">
+                <input type="hidden" name="postlike" value="like">
+                <input type="hidden" name="postid" value="{{.ID}}">
+                <button type="submit" class="forum-like">Like</button>
+            </form>
+
+
+        </div>
+
+
+        {{end}}
+
+        <!-- end of single forum thread-->
+
+    </div>
+
+
+    <!-- end of feed-->
+
+</body>
+
+</html>

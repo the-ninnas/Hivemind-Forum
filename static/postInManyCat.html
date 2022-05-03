@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/forum.css">
+
+
+</head>
+
+<body>
+
+    <!-- This page will display all the posts in choosed category, so if user presses on a category link on a posts, it will come to this page. -->
+
+    <div class="banner">
+
+        {{if .Username}}
+        <div class="status">
+            <span class="online"></span>
+            <p>{{.Username}} is online</p>
+            <a href="/logout" class="log-btn">Log Out</a>
+        </div>
+        {{else}}
+        <div class="status">
+            <p> Log in or <a href="/register">Register</a></p>
+        </div>
+
+        {{end}}
+
+    </div>
+
+
+    <!-- left side profile navbar-->
+
+    <div class="leftwrapper">
+
+        <div class="leftsidebar">
+
+            <div class="centered">
+
+                <a href="/"><img class="centered" src="../css/bee.png"></a>
+
+                <h3>HIVEMIND</h3>
+
+            </div>
+
+            <div class="sign-box">
+
+                {{if .Username }}
+
+                <a href="/post"><button class="blue-btn"> Create Post</button></a>
+                <a href="/"><button class="logged-in"> My Topics*</button></a>
+                <button class="logged-in"> Messages*</button>
+                <button class="logged-in"> Settings*</button> {{else}}
+
+                <form action="/login" method="POST">
+                    <input class="logged-out" type="text" name="username" placeholder="Username" required>
+                    <input class="logged-out" type="password" name="password" placeholder="Password" required>
+                    <input type="checkbox" checked="checked" name="remember"> Remember me
+                    <input class="logged-in" type="submit" value="LOG IN">
+                </form>
+
+                {{end}}
+
+
+            </div>
+
+
+            {{if .Message}}
+            <div class="msg-box">
+                <h3>Oops!</h3><span>{{ .Message}}</span>
+            </div>
+            {{end}} {{if .Username}}
+            <form action="logout" method="POST"><button class="logged-in-bottom">Log Out</button></form>
+            {{else}}
+            <a href="/register"><button class="blue-btn-bottom">Register</button></a> {{end}}
+        </div>
+
+    </div>
+
+
+    <!--right side categories and/or post navbar -->
+
+    <div class="wrapper">
+
+        <div class="sidebar">
+
+            <div class="tutorial">
+                <h3>When posting something:</h3>
+                <span>
+                  <ol>
+                  <li>Don't make a repost</li>
+                  <li>Open your mind</li>
+                  <li>Don't be afraid of a discussion</li>
+                  </ol>
+                </span>
+            </div>
+
+
+        </div>
+    </div>
+
+    <!-- end of sidenav profile bar-->
+
+
+
+
+
+    <div class="above-feed">
+        <h1>Create New Post</h1>
+
+    </div>
+
+
+    <!-- middle posting window-->
+
+    <div class="feed">
+
+        <!-- Will call /post function, to post inserted data to the database -->
+
+        <div class="post-box">
+
+            <div class="choose-cat">
+
+                <form action="/post" enctype="multipart/form-data" method="POST">
+                    <input type="text" class="p-title" name="title" placeholder="Title">
+                    <input type="file" name="myFile">
+                    <textarea name="content" placeholder="Text" rows="4" cols="50"></textarea>
+
+                    <!-- It should be possible to choose many categories -->
+
+                    <label for="category"><h4>Choose at least One or Multiple Categories:</h4></label> {{range .Categories}}
+                    <div class="ck-button">
+                        <label>
+                <input type="checkbox" name="category" value="{{.Title}}"><span>{{ .Title}}</span>
+                </label>
+                    </div>
+                    {{end}}
+            </div>
+            <button type="submit" class="post-btn" style="float: right;">Post</button>
+            </form>
+
+            <a href="/"><button class="post-btn" style="background-color: lightgray;">Cancel & Back to Main</button></a>
+
+        </div>
+    </div>
+    <!-- end of middle-->
+
+</body>
+
+</html>

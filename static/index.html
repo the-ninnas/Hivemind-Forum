@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome to Hivemind</title>
+    <!-- css -->
+    <link rel="stylesheet" href="../css/forum.css" />
+</head>
+
+<body>
+    <!-- This page will display all the posts in choosed category, so if user presses on a category link on a posts, it will come to this page. -->
+
+    <div class="banner">
+        {{if .Username}}
+        <div class="status">
+            <span class="online"></span>
+            <p>{{.Username}} is online</p>
+            <a href="/logout" class="log-btn">Log Out</a>
+        </div>
+        {{else}}
+        <div class="status">
+            <p>Log in or <a href="/register">Register</a></p>
+        </div>
+
+        {{end}}
+    </div>
+
+    <!-- left side profile navbar-->
+
+    <div class="leftwrapper">
+        <div class="leftsidebar">
+            <div class="centered">
+                <a href="/"><img class="centered" src="../css/bee.png" /></a>
+
+                <h3>HIVEMIND</h3>
+            </div>
+
+            <div class="sign-box">
+                {{if .Username }}
+
+                <a href="/post"><button class="blue-btn">Create Post</button></a>
+                <a href="/"><button class="logged-in">My Topics*</button></a>
+                <button class="logged-in">Messages*</button>
+                <button class="logged-in">Settings*</button> {{else}}
+
+                <form action="/login" method="POST">
+                    <input class="logged-out" type="text" name="username" placeholder="Username" required />
+                    <input class="logged-out" type="password" name="password" placeholder="Password" required />
+                    <input type="checkbox" checked="checked" name="remember" /> Remember me
+                    <input class="logged-in" type="submit" value="LOG IN" />
+                </form> 
+
+                <a href="https://github.com/login/oauth/authorize?client_id={{.Github}}&scope=user">
+                    <button class="log-ext git">
+                        <table>
+                            <th>
+                                <img src="../css/octopuss">
+                            </th>
+                            <th>
+                                <p>Log in with Github</p>
+                            </th>
+                        </table>
+                    </button>
+                </a>  
+
+                <a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email&response_type=code&redirect_uri=http://localhost:8080/googlecallback&access_type=online&client_id={{.Google}}">
+                    <button class="log-ext goo">
+                        <table>
+                            <th>
+                                <img src="../css/google">
+                            </th>
+                            <th>
+                                Log in with Google
+                            </th>
+                        </table>
+                    </button>
+                </a>
+
+
+                {{end}}
+            </div>
+
+            {{if .Message}}
+            <div class="msg-box">
+                <h3>Oops!</h3>
+                <span>{{ .Message}}</span>
+            </div>
+            {{end}} {{if .Username}}
+            <form action="logout" method="POST"><button class="logged-in-bottom">Log Out</button></form>
+            {{end}}
+        </div>
+    </div>
+
+    <!--right side categories and/or post navbar -->
+
+    <div class="wrapper">
+        <div class="sidebar">
+            <div class="tutorial">
+                <h1>Tutorial</h1>
+                <h3>Welcome, {{.Username}}</h3>
+                <span>Hivemind is an crowdsourcing platform full of brainsormers. Often, we're scared to share our
+                        ideas, worrying it would be critisized, stolen, or that we, ourselves, might look dumb.
+                        <br /><br />But the nature of innovation is that people of very different viewpoints,
+                        backgrounds, logics and creativities come together to make things HAPPEN. <br /><br />Plus, for
+                        many, the opportunity to think outside our comfort zone is plain fun. We're open-minded and
+                        there are no stupid questions or sugestions. <br /><br />
+                        So go ahead, join a brainstorm, or add a problem or topic of your own!
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- end of sidenav profile bar-->
+
+    <div class="above-feed">
+        <h3>
+            Browse Categories or <a href="/category"><button class="new-cat-btn">Create a Category</button></a>
+        </h3>
+        <p>What do you feel like twisting ze little grey cells about today?</p>
+    </div>
+
+    <!-- middle categories feed-->
+
+    <div class="feed-cat">
+        {{range .Categories}}
+        <a href="/c/{{.TitleEncoded}}">
+            <div class="cat-box">
+                <h3>{{ .Title}}</h3>
+                <p>{{ .Description}}</p>
+            </div>
+        </a>
+        {{end}}
+        <a href="/category">
+            <div class="cat-box-create">
+                <h3>+ Create new category</h3>
+            </div>
+        </a>
+    </div>
+
+    <!-- end of feed-->
+</body>
+
+</html>
