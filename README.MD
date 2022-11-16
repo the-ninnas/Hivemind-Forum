@@ -5,6 +5,8 @@ This is not a real-time forum, so first you need to create a user, and then you 
 Usage with terminal:
 * go run cmd/*
 
+It might take a minute to be ready, the terminal will let you know.
+
 Usage with Docker:
 * Type "sh docker-build.sh" to your terminal
 * Go to localhost:8080 from your browser
@@ -18,7 +20,6 @@ Go to github.go, change githubClientID and githubClientSecret on line 14 & 15. H
 - Application name: whatever..
 - Homepage URL: http://localhost:8080/
 - Authorization callback URL: http://localhost:8080/githubcallback
-
 
 Image upload:
 * Create a category
