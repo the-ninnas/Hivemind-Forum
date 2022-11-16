@@ -1,3 +1,5 @@
+*NB! Buttons with a * in their name are not operatale and are placeholders for future functions or aesthetic purposes.
+
 Image upload:
 * Create a category
 * Go to "Create Post" http://localhost:8080/post to make a post with an image.
@@ -18,7 +20,5 @@ Go to github.go, change githubClientID and githubClientSecret on line 14 & 15. H
 - Application name: whatever..
 - Homepage URL: http://localhost:8080/
 - Authorization callback URL: http://localhost:8080/githubcallback
-
-* Buttons with a * in their name are not operatale and are placeholders for future functions or aesthetic purposes.
 
 Authors: Anna-Maria, Gert, Mihkel, Silver
